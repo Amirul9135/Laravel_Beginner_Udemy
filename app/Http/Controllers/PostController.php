@@ -11,7 +11,7 @@ class PostController extends Controller
     public function __construct()
     {
 
-        $this->authorizeResource(Post::class, 'post');
+        $this->authorizeResource(Post::class, 'post'); //2nd param need to match with variable name in the controller methods parameter, post here, then the Post object in the controller methods param must also be "post"
     }
 
     /*
@@ -39,9 +39,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         // Your code to show the form for editing a specific user
+        return view('edit-post', ['post' => $post]);
     }
 
     /**
@@ -62,7 +63,7 @@ class PostController extends Controller
         Post::create($data);
 
         // Your code to validate and store a new user
-        return 'post created';
+        return redirect('/profile/'.auth()->user()->id.'/posts');
     }
 
     /**
@@ -88,9 +89,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         // Your code to validate and update a specific user
+        $data = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]);
+        $post->update($data);
+
+        return back();
     }
 
     /**
@@ -104,6 +112,6 @@ class PostController extends Controller
         // Your code to delete a specific user
         $post->delete();
 
-        return 'this is delete';
+        return redirect('/profile/'.auth()->user()->id.'/posts');
     }
 }

@@ -8,6 +8,10 @@
             <form class="ml-2 d-inline" action="#" method="POST">
                 <button class="btn btn-primary btn-sm">Follow <i class="fas fa-user-plus"></i></button>
                 <!-- <button class="btn btn-danger btn-sm">Stop Following <i class="fas fa-user-times"></i></button> -->
+                @if (auth()->user()->id == $user->id)
+                    <a href="/profile/{{ auth()->user()->id }}/avatar/manage" class="btn btn-secondary btn-sm">Manage
+                        Avatar</a>
+                @endif
             </form>
         </h2>
 

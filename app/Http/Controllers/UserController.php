@@ -2,13 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function userPosts(User $user) //username naming has to be same as what declared as path var in routing
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|max:3000', //max is in kB
+        ]);
+
+        $manager = new ImageManager(new Driver());
+        $rawimage = $manager->read($request->file('avatar'));
+        $image = $rawimage->cover(120, 120)->toJpeg();
+        /** @var \App\Models\User $user **/
+        $user = auth()->user();
+
+        $filename = $user->id.'-'.uniqid().'.jpg';
+
+        Storage::put('public/avatars/'.$filename, $image);
+
+        $user->avatar = $filename;
+        $user->save();
+
+    }
+
+    public function manageAvatar(User $user)
+    {
+        return view('manage-avatar', ['user' => $user]);
+    }
+
+    public function userPosts(User $user) //variable naming has to be same as what declared as path var in routing
     {
         return view('profile-posts', ['user' => $user, 'posts' => $user->posts()->get()]);
     }
@@ -69,8 +98,13 @@ class UserController extends Controller
         ]);
         User::create($data);
 
+        if (auth()->attempt($data)) {
+            $request->session()->regenerate();
+
+        }
+
         // Your code to validate and store a new user
-        return 'sini la patot';
+        return redirect('/');
     }
 
     /**

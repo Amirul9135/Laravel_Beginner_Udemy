@@ -8,7 +8,11 @@ Route::get('/', [UserController::class, 'showCorrectHomepage'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout']);
 
-Route::get('/profile/{user}/posts', [UserController::class, 'userPosts']);
+Route::prefix('profile')->group(function () {
+    Route::get('/{user}/posts', [UserController::class, 'userPosts']);
+    Route::get('/{user}/avatar/manage', [UserController::class, 'manageAvatar']);
+    Route::put('/{user}/avatar', [UserController::class, 'updateAvatar']);
+});
 
 Route::prefix('api')->group(function () {
     Route::resource('users', UserController::class, [
