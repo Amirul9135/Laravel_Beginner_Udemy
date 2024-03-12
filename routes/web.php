@@ -1,18 +1,30 @@
 <?php
 
-use App\Http\Controllers\ExampleController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/', [UserController::class, 'showCorrectHomepage'])->name('login');
+Route::post('/login', [UserController::class, 'login']);
+Route::post('logout', [UserController::class, 'logout']);
 
-Route::get('/', [ExampleController::class, 'homepage']);
-Route::get('/about', [ExampleController::class, 'singlePost']);
+Route::get('/profile/{user}/posts', [UserController::class, 'userPosts']);
+
+Route::prefix('api')->group(function () {
+    Route::resource('users', UserController::class, [
+        'except' => ['create', 'edit'], //seems unnecessary for fully JSON based API services, according to docs both create and edit is path to display forms je. maybe convenient if prerendered via blade but prefer total separation BE/FE
+    ]);
+    Route::resource('posts', PostController::class, [
+        'except' => ['create', 'edit'],
+    ]);
+});
+
+Route::prefix('view')->group(function () {
+    Route::resource('posts', PostController::class, [
+        'only' => ['create', 'edit'],
+    ])->middleware('auth');
+});
+
+Route::get('/token', function () {
+    return csrf_token();
+});
