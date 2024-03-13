@@ -2,15 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follow;
+use App\Models\User;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
-use App\Models\User;
 
 class UserController extends Controller
 {
+    public function userFollowers(User $user)
+    {
+
+        $this->profileSharedData($user);
+
+        return view('profile-followers', ['followers' => $user->followers()->get()]);
+    }
+
+    public function userFollowings(User $user)
+    {
+
+        $this->profileSharedData($user);
+
+        return view('profile-followings', ['followings' => $user->followings()->get()]);
+    }
+
+    public function userPosts(User $user) //variable naming has to be same as what declared as path var in routing
+    {
+        $this->profileSharedData($user);
+
+        return view('profile-posts', ['posts' => $user->posts()->get()]);
+    }
+
+    private function profileSharedData(User $user)
+    {
+        if (! auth()) {
+            return false;
+        }
+        view()->share('profileData', ['followingsCount' => $user->followings()->count(), 'followersCount' => $user->followers()->count(), 'postCount' => $user->posts()->count(), 'isFollowing' => Follow::where([['user_id', '=', auth()->user()->id], ['followed_user', '=', $user->id]])->count() > 0, 'user' => $user]);
+    }
+
     public function updateAvatar(Request $request)
     {
         $request->validate([
@@ -20,16 +53,22 @@ class UserController extends Controller
         $manager = new ImageManager(new Driver());
         $rawimage = $manager->read($request->file('avatar'));
         $image = $rawimage->cover(120, 120)->toJpeg();
-        /** @var \App\Models\User $user **/
+        /** @var \App\Models\User $user * */
         $user = auth()->user();
 
         $filename = $user->id.'-'.uniqid().'.jpg';
 
         Storage::put('public/avatars/'.$filename, $image);
 
-        $user->avatar = $filename;
+        $old = $user->avatar; //this 1 GET used the getter method which alrdy includes path
+        $user->avatar = $filename; //this 1 the exact filename
         $user->save();
 
+        if ($old != '/default-avatar.jpg') {
+            Storage::delete(str_replace('/storage/', 'public/', $old)); //hence here need to partially remove the path in old
+        }
+
+        return back()->with('info', 'Avatar Changed Successfully');
     }
 
     public function manageAvatar(User $user)
@@ -37,15 +76,13 @@ class UserController extends Controller
         return view('manage-avatar', ['user' => $user]);
     }
 
-    public function userPosts(User $user) //variable naming has to be same as what declared as path var in routing
-    {
-        return view('profile-posts', ['user' => $user, 'posts' => $user->posts()->get()]);
-    }
-
     public function showCorrectHomepage()
     {
         if (auth()->check()) {
-            return view('homepage-feed');
+            /** @var \App\Models\User $user * */
+            $user = auth()->user();
+
+            return view('homepage-feed', ['feeds' => $user->feedPosts()->paginate(5)]);
         } else {
             return view('homepage');
         }
@@ -68,10 +105,13 @@ class UserController extends Controller
         if (auth()->attempt(['username' => $data['loginusername'], 'password' => $data['loginpassword']])) {
             $request->session()->regenerate();
 
+            return redirect('/')->with('info', 'Welcome');
+
         } else {
+
+            return redirect('/')->with('error', 'Invalid Login, Please Try Again');
         }
 
-        return redirect('/');
     }
 
     /*

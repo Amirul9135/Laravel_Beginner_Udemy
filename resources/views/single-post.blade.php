@@ -17,8 +17,10 @@
         </div>
 
         <p class="text-muted small mb-4">
-            <a href="#"><img class="avatar-tiny" src="{{ $post->postedBy->avatar }}" /></a>
-            Posted by <a href="#">{{ $post->postedBy->username }}</a> on {{ $post->created_at->format('j/n/Y') }}
+            <a href="/profile/{{ $post->postedBy->username }}/posts"><img class="avatar-tiny"
+                    src="{{ $post->postedBy->avatar }}" /></a>
+            Posted by <a href="/profile/{{ $post->postedBy->username }}/posts">{{ $post->postedBy->username }}</a> on
+            {{ $post->created_at->format('j/n/Y') }}
         </p>
 
         <div class="body-content">

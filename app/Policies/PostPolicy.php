@@ -34,6 +34,11 @@ class PostPolicy
         return true;
     }
 
+    public function store(User $user)
+    {
+        return false;
+    }
+
     /**
      * Determine whether the user can update the model.
      */

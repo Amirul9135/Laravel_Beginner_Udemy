@@ -2,7 +2,7 @@
 
     <div class="container py-md-5 container--narrow">
         <form action="/api/posts/{{ $post->id }}" method="POST">
-            <p><strong><a href="/api/posts/{{ $post->id }}">Cancel Edit</a></strong></p>
+            <p><strong><a href="/api/posts/{{ $post->id }}">Back to post</a></strong></p>
             @csrf
             @method('PUT')
             <div class="form-group">

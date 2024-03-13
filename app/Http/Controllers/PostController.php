@@ -14,6 +14,14 @@ class PostController extends Controller
         $this->authorizeResource(Post::class, 'post'); //2nd param need to match with variable name in the controller methods parameter, post here, then the Post object in the controller methods param must also be "post"
     }
 
+    public function search($term)
+    {
+        $result = Post::search($term)->get();
+        $result->load('postedBy:id,username,avatar'); //name of the function which returns the linking relation
+
+        return $result;
+    }
+
     /*
     * HTTP: POST
     */
@@ -63,7 +71,7 @@ class PostController extends Controller
         Post::create($data);
 
         // Your code to validate and store a new user
-        return redirect('/profile/'.auth()->user()->id.'/posts');
+        return redirect('/profile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
     }
 
     /**
@@ -98,7 +106,7 @@ class PostController extends Controller
         ]);
         $post->update($data);
 
-        return back();
+        return back()->with('info', 'Post Edited');
     }
 
     /**
@@ -112,6 +120,6 @@ class PostController extends Controller
         // Your code to delete a specific user
         $post->delete();
 
-        return redirect('/profile/'.auth()->user()->id.'/posts');
+        return redirect('/profile/'.auth()->user()->username.'/posts');
     }
 }

@@ -16,9 +16,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/sweetalert.css" />
+    <script src="/sweetalert.min.js"></script>
+    @vite(['resources/js/app.js'])
 </head>
 
-<body>
+<body onload="bodyoad()">
     <header class="header-bar mb-3">
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/" class="text-white">OurApp</a></h4>
@@ -28,7 +31,7 @@
                         data-placement="bottom"><i class="fas fa-search"></i></a>
                     <span class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip"
                         data-placement="bottom"><i class="fas fa-comment"></i></span>
-                    <a href="/profile/{{ auth()->user()->id }}/posts" class="mr-2"><img title="My Profile"
+                    <a href="/profile/{{ auth()->user()->username }}/posts" class="mr-2"><img title="My Profile"
                             data-toggle="tooltip" data-placement="bottom"
                             style="width: 32px; height: 32px; border-radius: 16px" src="{{ auth()->user()->avatar }}" /></a>
                     <a class="btn btn-sm btn-success mr-2" href="/view/posts/create">Create Post</a>
@@ -57,6 +60,22 @@
             @endauth
         </div>
     </header>
+    <div id="message-info" style="display: none">
+        @if (session()->has('info'))
+            {{ session('info') }}
+        @endif
+    </div>
+    <div id="message-error" style="display: none">
+        @if (session()->has('error'))
+            {{ session('error') }}
+        @endif
+    </div>
+    <div id="message-success" style="display: none">
+        @if (session()->has('success'))
+            {{ session('success') }}
+        @endif
+    </div>
+    </div>
     <!-- header ends here -->
 
     {{ $slot }}
@@ -66,6 +85,12 @@
         <p class="m-0">Copyright &copy; 2022 <a href="/" class="text-muted">OurApp</a>. All rights reserved.
         </p>
     </footer>
+
+
+    @auth
+        <div data-username="{{ auth()->user()->username }}" data-avatar={{ auth()->user()->avatar }} id="chat-wrapper"
+            class="chat-wrapper shadow border-top border-left border-right"></div>
+    @endauth
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
@@ -78,6 +103,40 @@
     </script>
     <script>
         $('[data-toggle="tooltip"]').tooltip()
+
+        function bodyoad() {
+            console.log('loaded')
+            prompts()
+        }
+
+        function prompts() {
+            console.log('prompt')
+            let infoMsg = document.getElementById('message-info').innerHTML.trim();
+            let errMsg = document.getElementById('message-error').innerHTML.trim();
+            let succMsg = document.getElementById('message-success').innerHTML.trim();
+            if (infoMsg !== "") {
+                //alert(infoMsg);
+
+                Swal.fire({
+                    "type": 'info',
+                    "html": infoMsg
+                })
+            }
+            if (errMsg !== "") {
+                // alert(errMsg);
+                Swal.fire({
+                    "type": 'error',
+                    "html": errMsg
+                })
+            }
+            if (succMsg !== "") {
+                // alert(errMsg);
+                Swal.fire({
+                    "type": 'success',
+                    "html": succMsg
+                })
+            }
+        }
     </script>
 </body>
 
