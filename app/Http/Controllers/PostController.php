@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendNewPostEmail;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -69,6 +71,9 @@ class PostController extends Controller
         $data['body'] = strip_tags($data['body']);
         $data['user_id'] = auth()->id();
         Post::create($data);
+
+        dispatch(new SendNewPostEmail([auth()->user()->email], 'Post Created', 'You have succesfully created new post with title '.$data['title']));
+        Log::info('posted');
 
         // Your code to validate and store a new user
         return redirect('/profile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');

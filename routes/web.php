@@ -47,13 +47,18 @@ Route::get('/token', function () {
 
 Route::prefix('chat')->group(function () {
     Route::post('/', function (Request $request) {
-        $input = $request->validate([
-            'textvalue' => 'required',
-        ]);
+        try {
+            $input = $request->validate([
+                'textvalue' => 'required',
+            ]);
 
-        $text = trim(strip_tags($input['textvalue']));
-        if ($text) {
-            broadcast(new ChatMessage(['user' => auth()->user(), 'textvalue' => $text]))->toOthers();
+            $text = trim(strip_tags($input['textvalue']));
+            if ($text) {
+                broadcast(new ChatMessage(['user' => auth()->user(), 'textvalue' => $text]))->toOthers();
+            }
+
+        } catch (Exception $e) {
+            dd($e);
         }
 
         return response()->noContent();

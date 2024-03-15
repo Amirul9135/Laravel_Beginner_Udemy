@@ -69,13 +69,14 @@ export default class Chat {
   }
 
   displayMessageFromServer(data) {
+    console.log('chat', data);
     this.chatLog.insertAdjacentHTML(
       "beforeend",
       DOMPurify.sanitize(`
     <div class="chat-other">
-        <a href="/profile/${data.username}"><img class="avatar-tiny" src="${data.avatar}"></a>
+        <a href="/profile/${data.user.username}"><img class="avatar-tiny" src="${data.user.avatar}"></a>
         <div class="chat-message"><div class="chat-message-inner">
-          <a href="/profile/${data.username}"><strong>${data.username}:</strong></a>
+          <a href="/profile/${data.user.username}"><strong>${data.user.username}:</strong></a>
           ${data.textvalue}
         </div></div>
       </div>
