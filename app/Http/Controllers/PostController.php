@@ -76,7 +76,7 @@ class PostController extends Controller
         Log::info('posted');
 
         // Your code to validate and store a new user
-        return redirect('profile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
+        return redirect('aprofile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
     }
 
     /**
