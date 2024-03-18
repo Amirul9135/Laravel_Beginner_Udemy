@@ -22,20 +22,20 @@
                 @endif
 
                 @if (auth()->user()->id == $profileData['user']->id)
-                    <a href="/profile/{{ auth()->user()->username }}/avatar/manage" class="btn btn-secondary btn-sm">Manage
+                    <a href="profile/{{ auth()->user()->username }}/avatar/manage" class="btn btn-secondary btn-sm">Manage
                         Avatar</a>
                 @endif
             @endauth
         </h2>
 
         <div class="profile-nav nav nav-tabs pt-2 mb-4">
-            <a href="/profile/{{ $profileData['user']->username }}/posts"
+            <a href="profile/{{ $profileData['user']->username }}/posts"
                 class="profile-nav-link nav-item nav-link {{ $tab == 1 ? 'active' : '' }}">Posts:
                 {{ $profileData['postCount'] }}</a>
-            <a href="/profile/{{ $profileData['user']->username }}/followers"
+            <a href="profile/{{ $profileData['user']->username }}/followers"
                 class="profile-nav-link nav-item nav-link {{ $tab == 2 ? 'active' : '' }}">Followers:
                 {{ $profileData['followersCount'] }}</a>
-            <a href="/profile/{{ $profileData['user']->username }}/followings"
+            <a href="profile/{{ $profileData['user']->username }}/followings"
                 class="profile-nav-link nav-item nav-link {{ $tab == 3 ? 'active' : '' }}">Following:
                 {{ $profileData['followingsCount'] }}</a>
         </div>
