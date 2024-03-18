@@ -31,10 +31,10 @@
                         data-placement="bottom"><i class="fas fa-search"></i></a>
                     <span class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip"
                         data-placement="bottom"><i class="fas fa-comment"></i></span>
-                    <a href="profile/{{ auth()->user()->username }}/posts" class="mr-2"><img title="My Profile"
+                    <a href="/profile/{{ auth()->user()->username }}/posts" class="mr-2"><img title="My Profile"
                             data-toggle="tooltip" data-placement="bottom"
                             style="width: 32px; height: 32px; border-radius: 16px" src="{{ auth()->user()->avatar }}" /></a>
-                    <a class="btn btn-sm btn-success mr-2" href="view/posts/create">Create Post</a>
+                    <a class="btn btn-sm btn-success mr-2" href="/view/posts/create">Create Post</a>
                     <form action="/logout" method="POST" class="d-inline">
                         @csrf
                         <button class="btn btn-sm btn-secondary">Sign Out</button>
