@@ -1,7 +1,7 @@
 <x-layout>
 
     <div class="container py-md-5 container--narrow">
-        <form action="/api/posts" method="POST">
+        <form action="api/posts" method="POST">
             @csrf
             <div class="form-group">
                 <label for="post-title" class="text-muted mb-1"><small>Title</small></label>

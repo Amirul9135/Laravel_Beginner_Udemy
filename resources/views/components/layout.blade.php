@@ -37,13 +37,13 @@
                             data-toggle="tooltip" data-placement="bottom"
                             style="width: 32px; height: 32px; border-radius: 16px" src="{{ auth()->user()->avatar }}" /></a>
                     <a class="btn btn-sm btn-success mr-2" href="view/posts/create">Create Post</a>
-                    <form action="/logout" method="POST" class="d-inline">
+                    <form action="logout" method="POST" class="d-inline">
                         @csrf
                         <button class="btn btn-sm btn-secondary">Sign Out</button>
                     </form>
                 </div>
             @else
-                <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
+                <form action="login" method="POST" class="mb-0 pt-2 pt-md-0">
                     @csrf
                     <div class="row align-items-center">
                         <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">

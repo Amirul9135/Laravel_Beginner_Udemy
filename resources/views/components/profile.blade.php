@@ -7,14 +7,14 @@
             {{ $profileData['user']->username }}
             @auth
                 @if ($profileData['isFollowing'])
-                    <form class="ml-2 d-inline" action="/api/follows/{{ $profileData['user']->id }}" method="POST">
+                    <form class="ml-2 d-inline" action="api/follows/{{ $profileData['user']->id }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm">Unfollow <i class="fas fa-user-minus"></i></button>
                         <!-- <button class="btn btn-danger btn-sm">Stop Following <i class="fas fa-user-times"></i></button> -->
                     </form>
                 @elseif (!$profileData['isFollowing'] and auth()->user()->id != $profileData['user']->id)
-                    <form class="ml-2 d-inline" action="/api/follows/{{ $profileData['user']->id }}" method="POST">
+                    <form class="ml-2 d-inline" action="api/follows/{{ $profileData['user']->id }}" method="POST">
                         @csrf
                         <button class="btn btn-primary btn-sm">Follow <i class="fas fa-user-plus"></i></button>
                         <!-- <button class="btn btn-danger btn-sm">Stop Following <i class="fas fa-user-times"></i></button> -->
