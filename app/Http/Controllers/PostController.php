@@ -77,6 +77,8 @@ class PostController extends Controller
 
         // Your code to validate and store a new user
         //return redirect('aprofile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
+        dd(url(''));
+
         return redirect('profile/'.auth()->user()->username.'/posts');
     }
 
