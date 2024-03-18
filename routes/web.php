@@ -12,7 +12,7 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout']);
 
 Route::prefix('profile')->group(function () {
-    Route::get('/{user:username}/posts', [UserController::class, 'userPosts']);
+    Route::get('/{user:username}/posts', [UserController::class, 'userPosts'])->name('profile');
     Route::get('/{user:username}/avatar/manage', [UserController::class, 'manageAvatar']);
     Route::put('/{user:username}/avatar', [UserController::class, 'updateAvatar']);
 
