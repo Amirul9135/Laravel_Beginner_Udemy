@@ -76,7 +76,7 @@ class PostController extends Controller
         Log::info('posted');
 
         // Your code to validate and store a new user
-        return redirect('/profile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
+        return redirect('profile/'.auth()->user()->username.'/posts')->with('success', 'Posted Successfully');
     }
 
     /**
@@ -125,6 +125,6 @@ class PostController extends Controller
         // Your code to delete a specific user
         $post->delete();
 
-        return redirect('/profile/'.auth()->user()->username.'/posts');
+        return redirect('profile/'.auth()->user()->username.'/posts');
     }
 }
