@@ -68,7 +68,7 @@ class User extends Authenticatable
     public function avatar(): Attribute
     {
         return Attribute::make(get: function ($val) {
-            return $val ? '/storage/avatars/'.$val : '/default-avatar.jpg';
+            return $val ? 'storage/avatars/'.$val : 'default-avatar.jpg';
         });
     }
 }
