@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         auth()->logout();
 
-        return redirect('');
+        return redirect(env('SERVER_SUBPATH'));
     }
 
     public function login(Request $request)
@@ -105,11 +105,11 @@ class UserController extends Controller
         if (auth()->attempt(['username' => $data['loginusername'], 'password' => $data['loginpassword']])) {
             $request->session()->regenerate();
 
-            return redirect('')->with('info', 'Welcome');
+            return redirect(env('SERVER_SUBPATH'))->with('info', 'Welcome');
 
         } else {
 
-            return redirect('')->with('error', 'Invalid Login, Please Try Again');
+            return redirect(env('SERVER_SUBPATH'))->with('error', 'Invalid Login, Please Try Again');
         }
 
     }
@@ -144,7 +144,7 @@ class UserController extends Controller
         }
 
         // Your code to validate and store a new user
-        return redirect('');
+        return redirect(env('SERVER_SUBPATH'));
     }
 
     /**
